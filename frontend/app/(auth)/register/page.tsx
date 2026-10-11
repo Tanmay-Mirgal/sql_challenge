@@ -1,0 +1,15 @@
+import type { Metadata } from "next";
+import { redirect } from "next/navigation";
+import { AuthScreen } from "@/components/auth/auth-screen";
+import { getSession } from "@/lib/auth";
+import { safeNextPath } from "@/lib/safe-redirect";
+
+export const metadata: Metadata = { title: "Register" };
+
+export default async function RegisterPage({ searchParams }: PageProps<"/register">) {
+  const { session } = await getSession();
+  if (session) redirect("/dashboard");
+  const params = await searchParams;
+  const error = typeof params.error === "string" ? params.error : undefined;
+  return <AuthScreen mode="register" error={error} next={safeNextPath(params.next)} />;
+}
