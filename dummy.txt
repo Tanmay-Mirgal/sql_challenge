@@ -1,0 +1,13 @@
+# Variables read by docker-compose.yml (NOT by the applications directly).
+# Copy to `.env` next to docker-compose.yml.
+
+# Superuser of the dedicated SQL execution PostgreSQL (used only by the one-shot `sql-init` job).
+SQL_ADMIN_PASSWORD=r_d5xMIKAi8x-GFoiDPz7X1Zl4MJ6Vb3
+
+# Passwords for the two restricted roles created by `sql-init`.
+SQL_RUNNER_PASSWORD=Jx8aRrgRdOIGKlXwTI-E95B1obzq_lIt
+SQL_SETUP_PASSWORD=A5cnV0vB7wcg0Ejo3nY4SCTuvqzuYEKF
+
+# Public URLs the BROWSER uses to reach the API (baked into the frontend image at build time).
+NEXT_PUBLIC_API_BASE_URL=http://localhost:4000/api/v1
+NEXT_PUBLIC_SOCKET_URL=http://localhost:4000
