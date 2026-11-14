@@ -1,0 +1,79 @@
+# ===================================================================================
+# SQL Arena — backend configuration.  Copy to `.env` and fill in the blanks.
+# NEVER commit `.env`. Generate every secret locally:   npm run secrets:generate
+# ===================================================================================
+
+NODE_ENV=development
+PORT=4000
+LOG_LEVEL=info
+
+# Public URLs. FRONTEND_URL is the only browser origin allowed by CORS / CSRF origin checks
+# (add more, comma separated, with CORS_ALLOWED_ORIGINS).
+FRONTEND_URL=http://localhost:3000
+BACKEND_PUBLIC_URL=http://localhost:4000
+# CORS_ALLOWED_ORIGINS=
+# Number of reverse-proxy hops in front of the API (0 = none). Needed for correct client IPs / rate limits.
+TRUST_PROXY=0
+
+# --- Application database (MongoDB) ----------------------------------------------------------
+MONGODB_URI=mongodb+srv://tanmaymirgal26_db_user:oJaFj6vofyN4LpzV@cluster0.pqtquui.mongodb.net/sql_arena
+
+# --- Google OAuth 2.0 (web client) --------------------------------------------------------------
+# Console: https://console.cloud.google.com/apis/credentials → OAuth client ID → Web application
+# Authorised redirect URI must equal GOOGLE_CALLBACK_URL exactly.
+GOOGLE_CLIENT_ID=543575170617-oou22i76u8up7m76va6koksv5nth23ck.apps.googleusercontent.com
+GOOGLE_CLIENT_SECRET=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
+GOOGLE_CALLBACK_URL=http://localhost:4000/api/v1/auth/google/callback
+
+# --- Sessions & cookies --------------------------------------------------------------------------
+# At least 32 characters. Used to sign the short-lived OAuth transaction cookie.
+SESSION_SECRET=-3Kj0YNVfflMwL36ibxLv_ZgkkNsxphKAZt_clUJvfKyjz5ZtT4tzyfsWFNEuzys
+COOKIE_NAME=sql_challenge_session
+# true in production (HTTPS only). false is accepted ONLY for http://localhost development.
+COOKIE_SECURE=false
+# Production with separate sub-domains: set to the shared parent domain, e.g. .college.edu
+# COOKIE_DOMAIN=
+COOKIE_SAMESITE=lax
+SESSION_TTL_HOURS=72
+
+# --- Identity policy -----------------------------------------------------------------------------------
+# Comma separated e-mail domains that may sign in, e.g. college.edu,students.college.edu
+# Empty = any verified Google account (not recommended for a real event).
+ALLOWED_COLLEGE_EMAIL_DOMAINS=pvppcoe.ac.in
+# Used by `npm run admin:bootstrap` to grant the administrator role (never by an HTTP request).
+ADMIN_EMAILS=tanmaymirgal26@gmail.com
+
+# --- Groq (AI challenge generation, backend only) ----------------------------------------------------
+GROQ_API_KEY=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
+# Any chat-completions model your Groq account can use (https://console.groq.com/docs/models).
+# If empty and a key is set, a documented default is used and logged at start-up.
+GROQ_MODEL=llama-3.3-70b-versatile
+GROQ_TIMEOUT_MS=60000
+GROQ_MAX_ATTEMPTS=3
+
+# --- SQL execution engine (PostgreSQL, separate from MongoDB) -----------------------------------------
+# Roles are created by `npm run sql:init` (needs the superuser URL below, used ONLY by that script).
+SQL_ADMIN_DATABASE_URL=postgresql://postgres:r_d5xMIKAi8x-GFoiDPz7X1Zl4MJ6Vb3@localhost:5433/sql_exec
+# Low-privilege role that runs participant queries. Password: npm run secrets:generate
+SQL_EXECUTOR_DATABASE_URL=postgresql://sql_runner:Jx8aRrgRdOIGKlXwTI-E95B1obzq_lIt@localhost:5433/sql_exec
+# Trusted role that loads challenge fixtures. Keep this credential out of any "execution worker" process.
+SQL_SETUP_DATABASE_URL=postgresql://sql_setup:A5cnV0vB7wcg0Ejo3nY4SCTuvqzuYEKF@localhost:5433/sql_exec
+SQL_EXECUTOR_POOL_SIZE=5
+SQL_STATEMENT_TIMEOUT_MS=3000
+SQL_MAX_RESULT_ROWS=1000
+SQL_MAX_RESULT_BYTES=1000000
+SQL_MAX_QUERY_LENGTH=10000
+SQL_MAX_CONCURRENT_JOBS=5
+SQL_MAX_CONCURRENT_JOBS_PER_USER=1
+SQL_MAX_QUEUED_JOBS=200
+
+# --- Rate limits (requests per window) ---------------------------------------------------------------------
+RATE_LIMIT_AUTH_PER_15_MIN=40
+RATE_LIMIT_API_PER_MINUTE=300
+RATE_LIMIT_RUN_PER_MINUTE=20
+RATE_LIMIT_SUBMIT_PER_MINUTE=10
+RATE_LIMIT_GENERATION_PER_HOUR=20
+
+# Redis is NOT required for a single-instance deployment. For several API instances see the README
+# section "Scaling Socket.IO" (Redis adapter + shared rate-limit store).
+# REDIS_URL=
